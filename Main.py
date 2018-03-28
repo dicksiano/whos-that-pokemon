@@ -74,8 +74,20 @@ class GrafWidget(QWidget):
 class GrafWin(QFrame):
     def __init__(self):
         super().__init__()
-        listOfPokemons = []
-        answerPokemon = ''
+
+        self.listOfPokemons = []
+        self.answerPokemon = ''
+
+        self.b1 = QPushButton("Generate", self)
+        self.b1.setMinimumWidth(100)
+        self.b1.move(245, 460)
+        self.b1.clicked.connect(self.on_click_start)
+
+        self.b2 = ''
+        self.b3 = ''
+        self.b4 = ''
+        self.b5 = ''
+        self.b6 = ''
 
         self.initUI()
 
@@ -83,56 +95,64 @@ class GrafWin(QFrame):
         self.setGeometry(300, 300, 600, 500)
         self.setWindowTitle('Who\'s that Pokémon?')
         self.gf = GrafWidget(self)
-        self.gf.setGeometry(5, 5, 590, 400)
-
-        self.listOfPokemons = self.choosePokemon()
-        self.answerPokemon = self.listOfPokemons[random.randint(0,4)]
-        print(self.answerPokemon)
-
-        b1 = QPushButton("Generate", self)
-        b1.setMinimumWidth(100)
-        b1.move(245, 460)
-        b1.clicked.connect(self.on_click_start)
-
-        b2 = QPushButton(self.listOfPokemons[0], self)
-        b2.setMinimumWidth(100)
-        b2.move(5, 430)
-        b2.clicked.connect(self.on_click_choose)
-
-        b3 = QPushButton(self.listOfPokemons[1], self)
-        b3.setMinimumWidth(100)
-        b3.move(125, 430)
-        b3.clicked.connect(self.on_click_choose)
-
-        b4 = QPushButton(self.listOfPokemons[2], self)
-        b4.setMinimumWidth(100)
-        b4.move(245, 430)
-        b4.clicked.connect(self.on_click_choose)
-
-        b5 = QPushButton(self.listOfPokemons[3], self)
-        b5.setMinimumWidth(100)
-        b5.move(365, 430)
-        b5.clicked.connect(self.on_click_choose)
-
-        b6 = QPushButton(self.listOfPokemons[4], self)
-        b6.setMinimumWidth(100)
-        b6.move(485, 430)
-        b6.clicked.connect(self.on_click_choose)
+        self.gf.setGeometry(5, 5, 590, 400)        
 
         self.show()
 
+    def updatePokemons(self):
+        self.choosePokemon()
+        self.answerPokemon = self.listOfPokemons[random.randint(0,4)]
+        print(self.answerPokemon)
+
+    def updateButtons(self):
+        print("atualiza butao")
+        self.b2 = QPushButton(self.listOfPokemons[0], self)
+        self.b2.setMinimumWidth(100)
+        self.b2.move(5, 430)
+        self.b2.clicked.connect(self.on_click_choose)
+        self.b2.show()
+
+        self.b3 = QPushButton(self.listOfPokemons[1], self)
+        self.b3.setMinimumWidth(100)
+        self.b3.move(125, 430)
+        self.b3.clicked.connect(self.on_click_choose)
+        self.b3.show()
+
+        self.b4 = QPushButton(self.listOfPokemons[2], self)
+        self.b4.setMinimumWidth(100)
+        self.b4.move(245, 430)
+        self.b4.clicked.connect(self.on_click_choose)
+        self.b4.show()
+
+        self.b5 = QPushButton(self.listOfPokemons[3], self)
+        self.b5.setMinimumWidth(100)
+        self.b5.move(365, 430)
+        self.b5.clicked.connect(self.on_click_choose)
+        self.b5.show()
+
+        self.b6 = QPushButton(self.listOfPokemons[4], self)
+        self.b6.setMinimumWidth(100)
+        self.b6.move(485, 430)
+        self.b6.clicked.connect(self.on_click_choose)
+        self.b6.show()
+
+
     def choosePokemon(self):
+        
         randomNumbers = randomChooser.generateList()
-        listOfPokemons = []
+        self.listOfPokemons.clear()
 
         for i in range(5):
-            listOfPokemons.append(pokemons[randomNumbers[i]])
-
-        return listOfPokemons
-
+            self.listOfPokemons.append(pokemons[randomNumbers[i]])
         
     def on_click_start(self):
         print('Generate')
+        self.updatePokemons()
+        self.updateButtons()
+        self.show()
+
+    def on_click_nop(self):
+        pass
 
     def on_click_choose(self):
         guessedPokemon = self.sender().text()
@@ -141,8 +161,6 @@ class GrafWin(QFrame):
             print("Acertou, Mizeravi!")
         else:
             print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon)
-
-
 
 
 if __name__ == '__main__':

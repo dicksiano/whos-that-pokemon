@@ -1,8 +1,8 @@
 import random
 
 def generateList():
-	numLow = 1
-	numHigh = 150
+	numLow = 0
+	numHigh = 149
 
 	listOfNumbers = []
 
