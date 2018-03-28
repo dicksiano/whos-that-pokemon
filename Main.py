@@ -4,7 +4,24 @@ from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
     QPen, QMouseEvent, QPolygon, QPalette, QColor
 from PyQt5.QtCore import Qt, QRect
 import sys
+
 import Particle
+import randomChooser
+
+pokemons = ["goldeen", "kadabra", "vaporeon", "grimer", "machamp", "oddish", "poliwhirl", "squirtle", "doduo",
+            "charmander", "golem", "horsea", "magmar", "dragonite", "charizard", "drowzee", "electrode", "ponyta", "rhydon",
+            "caterpie", "zapdos", "pidgey", "voltorb", "shellder", "bulbasaur", "clefable", "omanyte", "hitmonchan", "mankey",
+            "nidoking", "magnemite", "geodude", "zubat", "cubone", "nidorino", "gastly", "seaking", "magneton", "ditto", "articuno",
+            "alakazam", "pikachu", "koffing", "golbat", "pidgeotto", "eevee", "muk", "starmie", "rattata", "slowpoke", "cloyster",
+            "nidoran", "nidorina", "hitmonlee", "aerodactyl", "ekans", "weepinbell", "gengar", "nidoqueen", "magikarp", "metapod", 
+            "machoke", "tentacruel", "tauros", "venomoth", "exeggutor", "onix", "spearow", "mr.mime", "kingler", "gloom", "sandslash",
+            "raichu", "moltres", "staryu", "lickitung", "abra", "arbok", "psyduck", "diglett", "wartortle", "slowbro", "dodrio", "raticate",
+            "dratini", "porygon", "beedrill", "tentacool", "omastar", "poliwag", "kakuna", "gyarados", "machop", "dragonair", "venusaur",
+            "victreebel", "arcanine", "flareon", "rapidash", "clefairy", "growlithe", "vulpix", "scyther", "jynx", "seadra", "paras",
+            "weezing", "dugtrio", "golduck", "charmeleon", "primeape", "blastoise", "seel", "farfetch", "mewtwo", "marowak", "ivysaur",
+            "tangela", "ninetales", "pidgeot", "bellsprout", "krabby", "electabuzz", "chansey", "pinsir", "persian", "lapras", "fearow", 
+            "exeggcute", "hypno", "parasect", "kangaskhan", "haunter", "kabutops", "dewgong", "venonat", "sandshrew", "weedle", "wigglytuff",
+            "jolteon", "graveler", "vileplume", "jigglypuff", "butterfree", "poliwrath", "rhyhorn", "kabuto" ] 
 
 class states:
     normal=0
@@ -26,14 +43,12 @@ class GrafWidget(QWidget):
     def paintEvent(self, e):
         qp = QPainter()
         qp.begin(self)
-        # qp.setRenderHint(QPainter.Antialiasing)
         qp.setPen(Qt.black)
         qp.setBrush(Qt.red)
         qp.end()
 
     def mouseMoveEvent(self, a0: QMouseEvent):
         self.cursor=(a0.x(),a0.y())
-        # self.update(cx-20,cy-20,40,40)
         if self.state == states.normal:
             pass
             
@@ -67,32 +82,42 @@ class GrafWin(QFrame):
         self.gf = GrafWidget(self)
         self.gf.setGeometry(5, 5, 590, 400)
 
+        listOfPokemons = self.choosePokemon()
+
         b1 = QPushButton("Generate", self)
         b1.setMinimumWidth(100)
         b1.move(245, 460)
 
-        b2 = QPushButton("Pokemon 1", self)
+        b2 = QPushButton(listOfPokemons[0], self)
         b2.setMinimumWidth(100)
         b2.move(5, 430)
 
-        b3 = QPushButton("Pokemon 2", self)
+        b3 = QPushButton(listOfPokemons[1], self)
         b3.setMinimumWidth(100)
         b3.move(125, 430)
 
-        b4 = QPushButton("Pokemon 3", self)
+        b4 = QPushButton(listOfPokemons[2], self)
         b4.setMinimumWidth(100)
         b4.move(245, 430)
 
-        b5 = QPushButton("Pokemon 4", self)
+        b5 = QPushButton(listOfPokemons[3], self)
         b5.setMinimumWidth(100)
         b5.move(365, 430)
 
-        b6 = QPushButton("Pokemon 5", self)
+        b6 = QPushButton(listOfPokemons[4], self)
         b6.setMinimumWidth(100)
         b6.move(485, 430)
 
         self.show()
 
+    def choosePokemon(self):
+        randomNumbers = randomChooser.generateList()
+        listOfPokemons = []
+
+        for i in range(5):
+            listOfPokemons.append(pokemons[randomNumbers[i]])
+
+        return listOfPokemons
 
 
 
