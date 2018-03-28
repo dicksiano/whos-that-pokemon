@@ -4,6 +4,7 @@ from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
     QPen, QMouseEvent, QPolygon, QPalette, QColor
 from PyQt5.QtCore import Qt, QRect
 import sys
+import random
 
 import Particle
 import randomChooser
@@ -73,6 +74,8 @@ class GrafWidget(QWidget):
 class GrafWin(QFrame):
     def __init__(self):
         super().__init__()
+        listOfPokemons = []
+        answerPokemon = ''
 
         self.initUI()
 
@@ -82,31 +85,39 @@ class GrafWin(QFrame):
         self.gf = GrafWidget(self)
         self.gf.setGeometry(5, 5, 590, 400)
 
-        listOfPokemons = self.choosePokemon()
+        self.listOfPokemons = self.choosePokemon()
+        self.answerPokemon = self.listOfPokemons[random.randint(0,4)]
+        print(self.answerPokemon)
 
         b1 = QPushButton("Generate", self)
         b1.setMinimumWidth(100)
         b1.move(245, 460)
+        b1.clicked.connect(self.on_click_start)
 
-        b2 = QPushButton(listOfPokemons[0], self)
+        b2 = QPushButton(self.listOfPokemons[0], self)
         b2.setMinimumWidth(100)
         b2.move(5, 430)
+        b2.clicked.connect(self.on_click_choose)
 
-        b3 = QPushButton(listOfPokemons[1], self)
+        b3 = QPushButton(self.listOfPokemons[1], self)
         b3.setMinimumWidth(100)
         b3.move(125, 430)
+        b3.clicked.connect(self.on_click_choose)
 
-        b4 = QPushButton(listOfPokemons[2], self)
+        b4 = QPushButton(self.listOfPokemons[2], self)
         b4.setMinimumWidth(100)
         b4.move(245, 430)
+        b4.clicked.connect(self.on_click_choose)
 
-        b5 = QPushButton(listOfPokemons[3], self)
+        b5 = QPushButton(self.listOfPokemons[3], self)
         b5.setMinimumWidth(100)
         b5.move(365, 430)
+        b5.clicked.connect(self.on_click_choose)
 
-        b6 = QPushButton(listOfPokemons[4], self)
+        b6 = QPushButton(self.listOfPokemons[4], self)
         b6.setMinimumWidth(100)
         b6.move(485, 430)
+        b6.clicked.connect(self.on_click_choose)
 
         self.show()
 
@@ -119,12 +130,23 @@ class GrafWin(QFrame):
 
         return listOfPokemons
 
+        
+    def on_click_start(self):
+        print('Generate')
+
+    def on_click_choose(self):
+        guessedPokemon = self.sender().text()
+        answerPokemon = self.answerPokemon
+        if guessedPokemon == answerPokemon:
+            print("Acertou, Mizeravi!")
+        else:
+            print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon)
+
 
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    # ex = GrafWidget(None)
     ex = GrafWin()
     ex.show()
     sys.exit(app.exec_())
