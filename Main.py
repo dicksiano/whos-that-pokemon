@@ -40,7 +40,7 @@ class GrafWidget(QWidget):
 
     def mousePressEvent(self, e: QMouseEvent):
         self.cursor=(e.x(),e.y())
-        if (self.states == states.normal):
+        if (self.state == states.normal):
             e.ignore()
 
 
