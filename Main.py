@@ -93,11 +93,7 @@ class GrafWin(QFrame):
         self.b1.move(5 + 2 * BUTTON_x, 30 + BUTTON_Y)
         self.b1.clicked.connect(self.on_click_start)
 
-        self.b2 = QPushButton(self)
-        self.b3 = QPushButton(self)
-        self.b4 = QPushButton(self)
-        self.b5 = QPushButton(self)
-        self.b6 = QPushButton(self)
+        self.createButtons()
 
         self.initUI()
 
@@ -110,7 +106,8 @@ class GrafWin(QFrame):
 
         self.buttonsGroup = QGroupBox()
         self.createBtnsLayout()
-        
+        self.buttonsGroup.hide()
+
         self.scene = QGraphicsScene()
         self.scene.setParent(self)
         self.scene.setSceneRect(5,5,500,300)
@@ -152,37 +149,40 @@ class GrafWin(QFrame):
         self.choosePokemon()
         self.answerPokemon = self.listOfPokemons[random.randint(0,4)]
 
-    def updateButtons(self):
-        self.b2.setText(self.listOfPokemons[0])
+    def createButtons(self):
+        self.b2 = QPushButton()
         self.b2.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b2.move(5, BUTTON_Y)
         self.b2.clicked.connect(self.on_click_choose)
-        self.b2.show()
 
-        self.b3.setText(self.listOfPokemons[1])
+        self.b3 = QPushButton()
         self.b3.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b3.move(5 + 1 * BUTTON_x, BUTTON_Y)
         self.b3.clicked.connect(self.on_click_choose)
-        self.b3.show()
 
-        self.b4.setText(self.listOfPokemons[2])
+        self.b4 = QPushButton()
         self.b4.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b4.move(5 + 2 * BUTTON_x, BUTTON_Y)
         self.b4.clicked.connect(self.on_click_choose)
-        self.b4.show()
 
-        self.b5.setText(self.listOfPokemons[3])
+        self.b5 = QPushButton()
         self.b5.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b5.move(5 + 3 * BUTTON_x, BUTTON_Y)
         self.b5.clicked.connect(self.on_click_choose)
-        self.b5.show()
 
-        self.b6.setText(self.listOfPokemons[4])
+        self.b6 = QPushButton()
         self.b6.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b6.move(5 + 4 * BUTTON_x, BUTTON_Y)
         self.b6.clicked.connect(self.on_click_choose)
-        self.b6.show()
 
+    def updateButtons(self):
+        self.b2.setText(self.listOfPokemons[0])
+        self.b3.setText(self.listOfPokemons[1])
+        self.b4.setText(self.listOfPokemons[2])
+        self.b5.setText(self.listOfPokemons[3])
+        self.b6.setText(self.listOfPokemons[4])
+
+        self.buttonsGroup.show()
         self.b1.hide()
 
 
@@ -216,11 +216,7 @@ class GrafWin(QFrame):
             print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon)
 
         self.b1.show()
-        self.b2.hide()
-        self.b3.hide()
-        self.b4.hide()
-        self.b5.hide()
-        self.b6.hide()
+        self.buttonsGroup.hide()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
