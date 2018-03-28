@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
 from PyQt5.QtCore import Qt, QRect
 import sys
 import random
+import time
 
 import Particle
 import randomChooser
@@ -82,6 +83,7 @@ class GrafWin(QFrame):
 
         self.listOfPokemons = []
         self.answerPokemon = ''
+        self.time = 0
 
         self.b1 = QPushButton("Generate", self)
         self.b1.setMinimumWidth(BUTTON_MIN_WIDTH)
@@ -107,10 +109,8 @@ class GrafWin(QFrame):
     def updatePokemons(self):
         self.choosePokemon()
         self.answerPokemon = self.listOfPokemons[random.randint(0,4)]
-        print(self.answerPokemon)
 
     def updateButtons(self):
-        print("atualiza butao")
         self.b2 = QPushButton(self.listOfPokemons[0], self)
         self.b2.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b2.move(5, BUTTON_Y)
@@ -141,6 +141,8 @@ class GrafWin(QFrame):
         self.b6.clicked.connect(self.on_click_choose)
         self.b6.show()
 
+        self.b1.hide()
+
 
     def choosePokemon(self):
         
@@ -151,22 +153,32 @@ class GrafWin(QFrame):
             self.listOfPokemons.append(pokemons[randomNumbers[i]])
         
     def on_click_start(self):
-        print('Generate')
         self.updatePokemons()
         self.updateButtons()
         self.show()
+        self.time = time.time()
+
 
     def on_click_nop(self):
         pass
 
     def on_click_choose(self):
+        self.time = time.time() - self.time
+        print("Time: " + str(self.time))
         guessedPokemon = self.sender().text()
         answerPokemon = self.answerPokemon
+
         if guessedPokemon == answerPokemon:
             print("Acertou, Mizeravi!")
         else:
             print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon)
 
+        self.b1.show()
+        self.b2.hide()
+        self.b3.hide()
+        self.b4.hide()
+        self.b5.hide()
+        self.b6.hide()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
