@@ -2,7 +2,7 @@ import random
 
 def generateList():
 	numLow = 0
-	numHigh = 149
+	numHigh = 145
 
 	listOfNumbers = []
 
