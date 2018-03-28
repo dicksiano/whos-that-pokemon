@@ -9,6 +9,11 @@ import random
 import Particle
 import randomChooser
 
+
+BUTTON_MIN_WIDTH = 100
+BUTTON_x = 120
+BUTTON_Y = 430
+
 pokemons = ["goldeen", "kadabra", "vaporeon", "grimer", "machamp", "oddish", "poliwhirl", "squirtle", "doduo",
             "charmander", "golem", "horsea", "magmar", "dragonite", "charizard", "drowzee", "electrode", "ponyta", "rhydon",
             "caterpie", "zapdos", "pidgey", "voltorb", "shellder", "bulbasaur", "clefable", "omanyte", "hitmonchan", "mankey",
@@ -79,8 +84,8 @@ class GrafWin(QFrame):
         self.answerPokemon = ''
 
         self.b1 = QPushButton("Generate", self)
-        self.b1.setMinimumWidth(100)
-        self.b1.move(245, 460)
+        self.b1.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b1.move(5 + 2 * BUTTON_x, 30 + BUTTON_Y)
         self.b1.clicked.connect(self.on_click_start)
 
         self.b2 = ''
@@ -107,32 +112,32 @@ class GrafWin(QFrame):
     def updateButtons(self):
         print("atualiza butao")
         self.b2 = QPushButton(self.listOfPokemons[0], self)
-        self.b2.setMinimumWidth(100)
-        self.b2.move(5, 430)
+        self.b2.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b2.move(5, BUTTON_Y)
         self.b2.clicked.connect(self.on_click_choose)
         self.b2.show()
 
         self.b3 = QPushButton(self.listOfPokemons[1], self)
-        self.b3.setMinimumWidth(100)
-        self.b3.move(125, 430)
+        self.b3.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b3.move(5 + 1 * BUTTON_x, BUTTON_Y)
         self.b3.clicked.connect(self.on_click_choose)
         self.b3.show()
 
         self.b4 = QPushButton(self.listOfPokemons[2], self)
-        self.b4.setMinimumWidth(100)
-        self.b4.move(245, 430)
+        self.b4.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b4.move(5 + 2 * BUTTON_x, BUTTON_Y)
         self.b4.clicked.connect(self.on_click_choose)
         self.b4.show()
 
         self.b5 = QPushButton(self.listOfPokemons[3], self)
-        self.b5.setMinimumWidth(100)
-        self.b5.move(365, 430)
+        self.b5.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b5.move(5 + 3 * BUTTON_x, BUTTON_Y)
         self.b5.clicked.connect(self.on_click_choose)
         self.b5.show()
 
         self.b6 = QPushButton(self.listOfPokemons[4], self)
-        self.b6.setMinimumWidth(100)
-        self.b6.move(485, 430)
+        self.b6.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b6.move(5 + 4 * BUTTON_x, BUTTON_Y)
         self.b6.clicked.connect(self.on_click_choose)
         self.b6.show()
 
