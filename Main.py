@@ -1,12 +1,15 @@
 from PyQt5.QtWidgets import QApplication, \
-    QWidget, QPushButton, QFrame, QSlider, QCheckBox, QFileDialog
+    QWidget, QPushButton, QFrame, QSlider, QCheckBox, QFileDialog,\
+    QGraphicsScene, QGraphicsView, QVBoxLayout, QGroupBox,\
+    QHBoxLayout
 from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
-    QPen, QMouseEvent, QPolygon, QPalette, QColor
-from PyQt5.QtCore import Qt, QRect
+    QPen, QMouseEvent, QPolygon, QPalette, QColor, QPixmap, QImage
+from PyQt5.QtCore import Qt, QRect, QPointF, QRandomGenerator, QTimer,\
+    QObject
 import sys
 import random
 
-import Particle
+from Particle import Particle
 import randomChooser
 
 
@@ -27,7 +30,7 @@ pokemons = ["goldeen", "kadabra", "vaporeon", "grimer", "machamp", "oddish", "po
             "weezing", "dugtrio", "golduck", "charmeleon", "primeape", "blastoise", "seel", "farfetch", "mewtwo", "marowak", "ivysaur",
             "tangela", "ninetales", "pidgeot", "bellsprout", "krabby", "electabuzz", "chansey", "pinsir", "persian", "lapras", "fearow", 
             "exeggcute", "hypno", "parasect", "kangaskhan", "haunter", "kabutops", "dewgong", "venonat", "sandshrew", "weedle", "wigglytuff",
-            "jolteon", "graveler", "vileplume", "jigglypuff", "butterfree", "poliwrath", "rhyhorn", "kabuto" ] 
+            "jolteon", "graveler", "vileplume", "jigglypuff", "butterfree", "poliwrath", "rhyhorn", "kabuto"] 
 
 class states:
     normal=0
@@ -88,21 +91,60 @@ class GrafWin(QFrame):
         self.b1.move(5 + 2 * BUTTON_x, 30 + BUTTON_Y)
         self.b1.clicked.connect(self.on_click_start)
 
-        self.b2 = ''
-        self.b3 = ''
-        self.b4 = ''
-        self.b5 = ''
-        self.b6 = ''
+        self.b2 = QPushButton(self)
+        self.b3 = QPushButton(self)
+        self.b4 = QPushButton(self)
+        self.b5 = QPushButton(self)
+        self.b6 = QPushButton(self)
 
         self.initUI()
 
     def initUI(self):
         self.setGeometry(300, 300, 600, 500)
         self.setWindowTitle('Who\'s that Pokémon?')
-        self.gf = GrafWidget(self)
-        self.gf.setGeometry(5, 5, 590, 400)        
+        # self.gf = GrafWidget(self)
+        # self.gf.setGeometry(5, 5, 590, 400)        
+        self.setLayout(QVBoxLayout())
+
+        self.buttonsGroup = QGroupBox()
+        self.createBtnsLayout()
+        
+        self.scene = QGraphicsScene()
+        self.scene.setParent(self)
+        self.scene.setSceneRect(5,5,500,300)
+        self.scene.setItemIndexMethod(QGraphicsScene.BspTreeIndex)
+        self.addParticles(200)
+
+        self.view = QGraphicsView(self.scene)
+        self.view.setBackgroundBrush(QColor(0,255,0))#QImage("assets/whosthatpokemon.png"))
+        # self.view.setCacheMode(QGraphicsView.CacheBackground)
+        self.view.setRenderHint(QPainter.Antialiasing)
+        self.layout().addWidget(self.view)
+        # self.view.show()
+        self.layout().addWidget(self.buttonsGroup)
+        self.layout().addWidget(self.b1)
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.scene.advance)
+        self.timer.start(1000/66)
 
         self.show()
+
+    def createBtnsLayout(self):
+        layout = QHBoxLayout()
+        layout.addWidget(self.b2)
+        layout.addWidget(self.b3)
+        layout.addWidget(self.b4)
+        layout.addWidget(self.b5)
+        layout.addWidget(self.b6)
+        self.buttonsGroup.setLayout(layout)
+
+    def addParticles(self, count: int):
+        gen = QRandomGenerator()
+        for i in range(count):
+            # print(random(self.scene.width()))
+            part = Particle(QPointF(gen.bounded(self.scene.width()), gen.bounded(self.scene.height())))
+            self.scene.addItem(part)
 
     def updatePokemons(self):
         self.choosePokemon()
@@ -111,31 +153,31 @@ class GrafWin(QFrame):
 
     def updateButtons(self):
         print("atualiza butao")
-        self.b2 = QPushButton(self.listOfPokemons[0], self)
+        self.b2.setText(self.listOfPokemons[0])
         self.b2.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b2.move(5, BUTTON_Y)
         self.b2.clicked.connect(self.on_click_choose)
         self.b2.show()
 
-        self.b3 = QPushButton(self.listOfPokemons[1], self)
+        self.b3.setText(self.listOfPokemons[1])
         self.b3.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b3.move(5 + 1 * BUTTON_x, BUTTON_Y)
         self.b3.clicked.connect(self.on_click_choose)
         self.b3.show()
 
-        self.b4 = QPushButton(self.listOfPokemons[2], self)
+        self.b4.setText(self.listOfPokemons[2])
         self.b4.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b4.move(5 + 2 * BUTTON_x, BUTTON_Y)
         self.b4.clicked.connect(self.on_click_choose)
         self.b4.show()
 
-        self.b5 = QPushButton(self.listOfPokemons[3], self)
+        self.b5.setText(self.listOfPokemons[3])
         self.b5.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b5.move(5 + 3 * BUTTON_x, BUTTON_Y)
         self.b5.clicked.connect(self.on_click_choose)
         self.b5.show()
 
-        self.b6 = QPushButton(self.listOfPokemons[4], self)
+        self.b6.setText(self.listOfPokemons[4])
         self.b6.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b6.move(5 + 4 * BUTTON_x, BUTTON_Y)
         self.b6.clicked.connect(self.on_click_choose)
