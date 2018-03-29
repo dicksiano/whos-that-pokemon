@@ -36,6 +36,7 @@ class Particle(QGraphicsItem):
         if not step:
             return
         self.setPos(self.pos() + self.speed)
+        self.scene().upAlpha(self)
         if self.hasCollidedX():
             self.speed.setX(self.speed.x()*-1)
         if self.hasCollidedY():

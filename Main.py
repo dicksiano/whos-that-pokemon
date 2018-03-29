@@ -1,7 +1,7 @@
 ﻿from PyQt5.QtWidgets import QApplication, \
     QWidget, QPushButton, QFrame, QSlider, QCheckBox, QFileDialog,\
     QGraphicsScene, QGraphicsView, QVBoxLayout, QGroupBox,\
-    QHBoxLayout, QGraphicsPixmapItem
+    QHBoxLayout, QGraphicsPixmapItem, QGraphicsItem
 from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
     QPen, QMouseEvent, QPolygon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import Qt, QRect, QPointF, QRandomGenerator, QTimer,\
@@ -63,7 +63,7 @@ class GrafScene(QGraphicsScene):
 
         # pokemon.pixmap(
         self.addItem(self.pokemon)
-        self.addParticles(200)
+        self.addParticles(150)
         self.view.setFixedSize(761,431)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -83,9 +83,32 @@ class GrafScene(QGraphicsScene):
 
     def setNewPokemon(self, name):
         self.image.load("assets/" + name.lower() + ".png")
+        for i in range(self.image.width()):
+            for j in range(self.image.height()):
+                color = self.image.pixelColor(i,j)
+                if color.alpha() != 0:
+                    color.setAlpha(5)
+                    self.image.setPixel(i,j,color.rgba())
         self.pokemon.setPixmap(QPixmap().fromImage(self.image))
         pokepix = self.pokemon.pixmap()
-        self.pokemon.setPos(220-pokepix.width()/2,220-pokepix.height()/2)
+        self.pokemon.setPos(220-self.image.width()/2,220-self.image.height()/2)
+
+    def upAlpha(self, particle: QGraphicsItem):
+        if self.pokemon.collidesWithItem(particle):
+            # particle.setVisible(False)
+            pos = QPointF(particle.pos().x()-220+self.image.width()/2,particle.pos().y()-220+self.image.height()/2)# self.pokemon.mapToItem(self.pokemon, particle.pos())
+            border = 2
+            if pos.x() > border and pos.x() < self.image.width()-border and\
+                pos.y() > border and pos.y() < self.image.height()-border:
+                for i in range(-border,border):
+                    for j in range(-border,border):
+                        color = self.image.pixelColor(pos.x()+i, pos.y()+j)
+                        if color.alpha() > 0 and color.alpha() < 255:
+                            color.setAlpha(color.alpha()+10)
+                            self.image.setPixel(pos.x()+i, pos.y()+j, color.rgba())
+                            self.pokemon.setPixmap(QPixmap().fromImage(self.image))
+                            self.pokemon.show()
+
 
 
 
