@@ -54,12 +54,15 @@ class GrafScene(QGraphicsScene):
         self.setBackgroundBrush(QColor(255, 0, 0))
         # pokemon = QGraphicsPixmapItem(QPixmap("assets/gengar.png"))
         bgimg = QPixmap("assets/whosthatpokemon.jpg")
-        print(bgimg.width(), bgimg.height())
+        # print(bgimg.width(), bgimg.height())
         self.addPixmap(QPixmap("assets/whosthatpokemon.jpg"))
 
-        self.image.load("assets/gengar.png")
-        pokemon = QPixmap().fromImage(self.image)
-        self.addPixmap(pokemon)
+        # img = image.load("assets/gengar.png")
+        self.pokemon = QGraphicsPixmapItem()
+        self.setNewPokemon("Gengar")
+
+        # pokemon.pixmap(
+        self.addItem(self.pokemon)
         self.addParticles(200)
         self.view.setFixedSize(761,431)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -77,6 +80,14 @@ class GrafScene(QGraphicsScene):
             part = Particle(QPointF(gen.bounded(self.width()),\
                 gen.bounded(self.height())))
             self.addItem(part)
+
+    def setNewPokemon(self, name):
+        self.image.load("assets/" + name.lower() + ".png")
+        self.pokemon.setPixmap(QPixmap().fromImage(self.image))
+        pokepix = self.pokemon.pixmap()
+        self.pokemon.setPos(220-pokepix.width()/2,220-pokepix.height()/2)
+
+
 
 
 
@@ -183,6 +194,7 @@ class GrafWin(QFrame):
     def on_click_start(self):
         self.updatePokemons()
         self.updateButtons()
+        self.scene.setNewPokemon(self.answerPokemon)
         self.show()
         self.time = time.time()
 
