@@ -18,20 +18,27 @@ BUTTON_MIN_WIDTH = 100
 BUTTON_x = 120
 BUTTON_Y = 430
 
-pokemons = ["goldeen", "kadabra", "vaporeon", "grimer", "machamp", "oddish", "poliwhirl", "squirtle", "doduo",
-            "charmander", "golem", "horsea", "magmar", "dragonite", "charizard", "drowzee", "electrode", "ponyta", "rhydon",
-            "caterpie", "zapdos", "pidgey", "voltorb", "shellder", "bulbasaur", "clefable", "omanyte", "hitmonchan", "mankey",
-            "nidoking", "magnemite", "geodude", "zubat", "cubone", "nidorino", "gastly", "seaking", "magneton", "ditto", "articuno",
-            "alakazam", "pikachu", "koffing", "golbat", "pidgeotto", "eevee", "muk", "starmie", "rattata", "slowpoke", "cloyster",
-            "nidoran", "nidorina", "hitmonlee", "aerodactyl", "ekans", "weepinbell", "gengar", "nidoqueen", "magikarp", "metapod", 
-            "machoke", "tentacruel", "tauros", "venomoth", "exeggutor", "onix", "spearow", "mr.mime", "kingler", "gloom", "sandslash",
-            "raichu", "moltres", "staryu", "lickitung", "abra", "arbok", "psyduck", "diglett", "wartortle", "slowbro", "dodrio", "raticate",
-            "dratini", "porygon", "beedrill", "tentacool", "omastar", "poliwag", "kakuna", "gyarados", "machop", "dragonair", "venusaur",
-            "victreebel", "arcanine", "flareon", "rapidash", "clefairy", "growlithe", "vulpix", "scyther", "jynx", "seadra", "paras",
-            "weezing", "dugtrio", "golduck", "charmeleon", "primeape", "blastoise", "seel", "farfetch", "mewtwo", "marowak", "ivysaur",
-            "tangela", "ninetales", "pidgeot", "bellsprout", "krabby", "electabuzz", "chansey", "pinsir", "persian", "lapras", "fearow", 
-            "exeggcute", "hypno", "parasect", "kangaskhan", "haunter", "kabutops", "dewgong", "venonat", "sandshrew", "weedle", "wigglytuff",
-            "jolteon", "graveler", "vileplume", "jigglypuff", "butterfree", "poliwrath", "rhyhorn", "kabuto"] 
+pokemons = ['Goldeen', 'Kadabra', 'Vaporeon', 'Grimer', 'Machamp', 'Oddish',\
+'Poliwhirl', 'Squirtle', 'Doduo', 'Charmander', 'Golem', 'Horsea', 'Magmar',\
+'Dragonite', 'Charizard', 'Drowzee', 'Electrode', 'Ponyta', 'Rhydon', 'Caterpie',\
+'Zapdos', 'Pidgey', 'Voltorb', 'Shellder', 'Bulbasaur', 'Clefable', 'Omanyte',\
+'Hitmonchan', 'Mankey', 'Nidoking', 'Magnemite', 'Geodude', 'Zubat', 'Cubone',\
+'Nidorino', 'Gastly', 'Seaking', 'Magneton', 'Ditto', 'Articuno', 'Alakazam',\
+'Pikachu', 'Koffing', 'Golbat', 'Pidgeotto', 'Eevee', 'Muk', 'Starmie', 'Rattata',\
+'Slowpoke', 'Cloyster', 'Nidoran', 'Nidorina', 'Hitmonlee', 'Aerodactyl', 'Ekans',\
+'Weepinbell', 'Gengar', 'Nidoqueen', 'Magikarp', 'Metapod', 'Machoke', 'Tentacruel',\
+'Tauros', 'Venomoth', 'Exeggutor', 'Onix', 'Spearow', 'Mr.Mime', 'Kingler',\
+'Gloom', 'Sandslash', 'Raichu', 'Moltres', 'Staryu', 'Lickitung', 'Abra',\
+'Arbok', 'Psyduck', 'Diglett', 'Wartortle', 'Slowbro', 'Dodrio', 'Raticate',\
+'Dratini', 'Porygon', 'Beedrill', 'Tentacool', 'Omastar', 'Poliwag', 'Kakuna',\
+'Gyarados', 'Machop', 'Dragonair', 'Venusaur', 'Victreebel', 'Arcanine', 'Flareon',\
+'Rapidash', 'Clefairy', 'Growlithe', 'Vulpix', 'Scyther', 'Jynx', 'Seadra',\
+'Paras', 'Weezing', 'Dugtrio', 'Golduck', 'Charmeleon', 'Primeape', 'Blastoise',\
+'Seel', 'Farfetch', 'Mewtwo', 'Marowak', 'Ivysaur', 'Tangela', 'Ninetales',\
+'Pidgeot', 'Bellsprout', 'Krabby', 'Electabuzz', 'Chansey', 'Pinsir', 'Persian',\
+'Lapras', 'Fearow', 'Exeggcute', 'Hypno', 'Parasect', 'Kangaskhan', 'Haunter',\
+'Kabutops', 'Dewgong', 'Venonat', 'Sandshrew', 'Weedle', 'Wigglytuff', 'Jolteon',\
+'Graveler', 'Vileplume', 'Jigglypuff', 'Butterfree', 'Poliwrath', 'Rhyhorn', 'Kabuto'] 
 
 class states:
     normal=0
@@ -58,19 +65,19 @@ class GrafWidget(QWidget):
         qp.end()
 
     def mouseMoveEvent(self, a0: QMouseEvent):
-        self.cursor=(a0.x(),a0.y())
+        self.cursor = (a0.x(), a0.y())
         if self.state == states.normal:
             pass
-            
+
 
     def mousePressEvent(self, e: QMouseEvent):
-        self.cursor=(e.x(),e.y())
-        if (self.state == states.normal):
+        self.cursor = (e.x(), e.y())
+        if self.state == states.normal:
             e.ignore()
 
 
     def mouseReleaseEvent(self, a0: QMouseEvent):
-        self.cursor=(a0.x(),a0.y())
+        self.cursor = (a0.x(), a0.y())
         if self.state == states.normal:
             a0.ignore()
 
@@ -101,7 +108,7 @@ class GrafWin(QFrame):
         self.setGeometry(300, 300, 600, 500)
         self.setWindowTitle('Who\'s that Pokémon?')
         # self.gf = GrafWidget(self)
-        # self.gf.setGeometry(5, 5, 590, 400)        
+        # self.gf.setGeometry(5, 5, 590, 400)
         self.setLayout(QVBoxLayout())
 
         self.buttonsGroup = QGroupBox()
@@ -110,12 +117,12 @@ class GrafWin(QFrame):
 
         self.scene = QGraphicsScene()
         self.scene.setParent(self)
-        self.scene.setSceneRect(5,5,500,300)
+        self.scene.setSceneRect(5, 5, 500, 300)
         self.scene.setItemIndexMethod(QGraphicsScene.BspTreeIndex)
         self.addParticles(200)
 
         self.view = QGraphicsView(self.scene)
-        self.view.setBackgroundBrush(QColor(0,255,0))#QImage("assets/whosthatpokemon.png"))
+        self.view.setBackgroundBrush(QColor(0, 255, 0))#QImage("assets/whosthatpokemon.png"))
         # self.view.setCacheMode(QGraphicsView.CacheBackground)
         self.view.setRenderHint(QPainter.Antialiasing)
         self.layout().addWidget(self.view)
@@ -142,12 +149,13 @@ class GrafWin(QFrame):
         gen = QRandomGenerator()
         for i in range(count):
             # print(random(self.scene.width()))
-            part = Particle(QPointF(gen.bounded(self.scene.width()), gen.bounded(self.scene.height())))
+            part = Particle(QPointF(gen.bounded(self.scene.width()),\
+                gen.bounded(self.scene.height())))
             self.scene.addItem(part)
 
     def updatePokemons(self):
         self.choosePokemon()
-        self.answerPokemon = self.listOfPokemons[random.randint(0,4)]
+        self.answerPokemon = self.listOfPokemons[random.randint(0, 4)]
 
     def createButtons(self):
         self.b2 = QPushButton()
@@ -187,13 +195,13 @@ class GrafWin(QFrame):
 
 
     def choosePokemon(self):
-        
+
         randomNumbers = randomChooser.generateList()
         self.listOfPokemons.clear()
 
         for i in range(5):
             self.listOfPokemons.append(pokemons[randomNumbers[i]])
-        
+
     def on_click_start(self):
         self.updatePokemons()
         self.updateButtons()
@@ -213,7 +221,8 @@ class GrafWin(QFrame):
         if guessedPokemon == answerPokemon:
             print("Acertou, Mizeravi!")
         else:
-            print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon)
+            print("Achou que era o " + guessedPokemon + "? Achou errado, otario.\
+             O pokemon correto era: " + answerPokemon)
 
         self.b1.show()
         self.buttonsGroup.hide()
