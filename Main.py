@@ -1,11 +1,11 @@
 ﻿from PyQt5.QtWidgets import QApplication, \
     QWidget, QPushButton, QFrame, QSlider, QCheckBox, QFileDialog,\
     QGraphicsScene, QGraphicsView, QVBoxLayout, QGroupBox,\
-    QHBoxLayout
+    QHBoxLayout, QGraphicsPixmapItem
 from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
     QPen, QMouseEvent, QPolygon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import Qt, QRect, QPointF, QRandomGenerator, QTimer,\
-    QObject
+    QObject, QRectF
 import sys
 import random
 import time
@@ -43,48 +43,41 @@ pokemons = ['Goldeen', 'Kadabra', 'Vaporeon', 'Grimer', 'Machamp', 'Oddish',\
 class states:
     normal=0
 
-class GrafWidget(QWidget):
+class GrafScene(QGraphicsScene):
     def __init__(self, parent):
-        super().__init__()
-        self.setParent(parent)
-        self.setMouseTracking(True)
-
-        self.state=states.normal
-        self.cursor=(10,10)
-        self.polygons = []
-        self.initUI()
+        super().__init__(parent)
+        self.view = QGraphicsView(self)
+        self.image = QImage()
 
     def initUI(self):
-        self.setMinimumSize(380, 250)
+        self.setItemIndexMethod(QGraphicsScene.BspTreeIndex)
+        self.setBackgroundBrush(QColor(255, 0, 0))
+        # pokemon = QGraphicsPixmapItem(QPixmap("assets/gengar.png"))
+        bgimg = QPixmap("assets/whosthatpokemon.jpg")
+        print(bgimg.width(), bgimg.height())
+        self.addPixmap(QPixmap("assets/whosthatpokemon.jpg"))
 
-    def paintEvent(self, e):
-        qp = QPainter()
-        qp.begin(self)
-        qp.setPen(Qt.black)
-        qp.setBrush(Qt.red)
-        qp.end()
+        self.image.load("assets/gengar.png")
+        pokemon = QPixmap().fromImage(self.image)
+        self.addPixmap(pokemon)
+        self.addParticles(200)
+        self.view.setFixedSize(761,431)
+        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        # self.scene.setSceneRect(5, 5, self.width()-10, 300)
+        self.view.setBackgroundBrush(QColor(0, 255, 0))#QImage("assets/whosthatpokemon.png"))
+        # self.view.setCacheMode(QGraphicsView.CacheBackground)
+        self.view.setRenderHint(QPainter.Antialiasing)
+        # self.scene.views
 
-    def mouseMoveEvent(self, a0: QMouseEvent):
-        self.cursor = (a0.x(), a0.y())
-        if self.state == states.normal:
-            pass
+    def addParticles(self, count: int):
+        gen = QRandomGenerator()
+        for i in range(count):
+            # print(random(self.scene.width()))
+            part = Particle(QPointF(gen.bounded(self.width()),\
+                gen.bounded(self.height())))
+            self.addItem(part)
 
-
-    def mousePressEvent(self, e: QMouseEvent):
-        self.cursor = (e.x(), e.y())
-        if self.state == states.normal:
-            e.ignore()
-
-
-    def mouseReleaseEvent(self, a0: QMouseEvent):
-        self.cursor = (a0.x(), a0.y())
-        if self.state == states.normal:
-            a0.ignore()
-
-    def setParams(self, diameter, trees):
-        self.diameter = diameter
-        self.trees = trees
-        self.update()
 
 
 class GrafWin(QFrame):
@@ -95,17 +88,11 @@ class GrafWin(QFrame):
         self.answerPokemon = ''
         self.time = 0
 
-        self.b1 = QPushButton("Generate", self)
-        self.b1.setMinimumWidth(BUTTON_MIN_WIDTH)
-        self.b1.move(5 + 2 * BUTTON_x, 30 + BUTTON_Y)
-        self.b1.clicked.connect(self.on_click_start)
-
         self.createButtons()
-
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(300, 300, 600, 500)
+        self.setFixedSize(785,500)
         self.setWindowTitle('Who\'s that Pokémon?')
         # self.gf = GrafWidget(self)
         # self.gf.setGeometry(5, 5, 590, 400)
@@ -115,26 +102,19 @@ class GrafWin(QFrame):
         self.createBtnsLayout()
         self.buttonsGroup.hide()
 
-        self.scene = QGraphicsScene()
-        self.scene.setParent(self)
-        self.scene.setSceneRect(5, 5, 500, 300)
-        self.scene.setItemIndexMethod(QGraphicsScene.BspTreeIndex)
-        self.addParticles(200)
+        self.scene = GrafScene(self)
+        self.scene.initUI()
 
-        self.view = QGraphicsView(self.scene)
-        # self.view.setBackgroundBrush(QColor(0, 255, 0))#QImage("assets/whosthatpokemon.png"))
-        # self.view.setCacheMode(QGraphicsView.CacheBackground)
-        self.view.setRenderHint(QPainter.Antialiasing)
-
-        self.layout().addWidget(self.view)
-        # self.view.show()
+        self.layout().addWidget(self.scene.view)
         self.layout().addWidget(self.buttonsGroup)
         self.layout().addWidget(self.b1)
-
+        # self.layout().
+        self.scene.setSceneRect(QRectF(self.scene.view.rect()))
         self.timer = QTimer()
         self.timer.timeout.connect(self.scene.advance)
         self.timer.start(1000/66)
 
+        print(self.scene.width(),self.scene.height())
         self.show()
 
     def createBtnsLayout(self):
@@ -146,19 +126,16 @@ class GrafWin(QFrame):
         layout.addWidget(self.b6)
         self.buttonsGroup.setLayout(layout)
 
-    def addParticles(self, count: int):
-        gen = QRandomGenerator()
-        for i in range(count):
-            # print(random(self.scene.width()))
-            part = Particle(QPointF(gen.bounded(self.scene.width()),\
-                gen.bounded(self.scene.height())))
-            self.scene.addItem(part)
-
     def updatePokemons(self):
         self.choosePokemon()
         self.answerPokemon = self.listOfPokemons[random.randint(0, 4)]
 
     def createButtons(self):
+        self.b1 = QPushButton("Generate", self)
+        self.b1.setMinimumWidth(BUTTON_MIN_WIDTH)
+        self.b1.move(5 + 2 * BUTTON_x, 30 + BUTTON_Y)
+        self.b1.clicked.connect(self.on_click_start)
+
         self.b2 = QPushButton()
         self.b2.setMinimumWidth(BUTTON_MIN_WIDTH)
         self.b2.move(5, BUTTON_Y)

@@ -48,5 +48,5 @@ class Particle(QGraphicsItem):
     def paint(self, painter: QPainter, a, b):
         """Show particle on the screen"""
         painter.setPen(Qt.NoPen)
-        painter.setBrush(QColor(255, 0, 255, 30))
+        painter.setBrush(QColor(255, 0, 255, 255))
         painter.drawEllipse(self.boundingRect())
