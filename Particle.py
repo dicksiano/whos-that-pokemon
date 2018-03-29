@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QVector2D, QPainter, QColor
 from PyQt5.QtWidgets import QGraphicsItem, QWidget, QStyleOptionGraphicsItem
-from PyQt5.QtCore import QRectF, QPointF, QRandomGenerator
+from PyQt5.QtCore import QRectF, QPointF, QRandomGenerator, Qt
 from random import randint
 class Particle(QGraphicsItem):
     """Particle class to simulate physics"""
@@ -9,6 +9,7 @@ class Particle(QGraphicsItem):
         receive 'r' that is radius (float) and 'speed' that is speed (QVector2d)"""
         super().__init__()
         self.setPos(pos.x(), pos.y())
+
         self.rad = kwargs.get('r', 2)
         self.speed = kwargs.get('speed', QPointF(QRandomGenerator(randint(0,500)).bounded(-10,10),\
          QRandomGenerator(randint(0,500)).bounded(-10,10)))
@@ -46,5 +47,6 @@ class Particle(QGraphicsItem):
 
     def paint(self, painter: QPainter, a, b):
         """Show particle on the screen"""
-        painter.setBrush(QColor(255, 255, 255))
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(QColor(255, 0, 255, 30))
         painter.drawEllipse(self.boundingRect())

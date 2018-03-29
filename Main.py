@@ -122,9 +122,10 @@ class GrafWin(QFrame):
         self.addParticles(200)
 
         self.view = QGraphicsView(self.scene)
-        self.view.setBackgroundBrush(QColor(0, 255, 0))#QImage("assets/whosthatpokemon.png"))
+        # self.view.setBackgroundBrush(QColor(0, 255, 0))#QImage("assets/whosthatpokemon.png"))
         # self.view.setCacheMode(QGraphicsView.CacheBackground)
         self.view.setRenderHint(QPainter.Antialiasing)
+
         self.layout().addWidget(self.view)
         # self.view.show()
         self.layout().addWidget(self.buttonsGroup)
