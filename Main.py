@@ -232,6 +232,8 @@ class GrafWin(QFrame):
             if isinstance(i,Particle):
                 i.setVisible(True)
 
+        QSound.play("audio/whoisthatpokemon.wav")
+
 
     def on_click_nop(self):
         pass
@@ -249,9 +251,10 @@ class GrafWin(QFrame):
 
         if guessedPokemon == answerPokemon:
             print("Acertou, Mizeravi!\n")
+            QSound.play("audio/success.wav")
         else:
-            print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon + "\n")
-            QSound.play("audio/audio.wav")
+            print("Achou que era o " + guessedPokemon + "? Achou errado, otario!\nO pokemon correto era: " + answerPokemon + "\n")
+            QSound.play("audio/fail.wav")
 
         self.b1.show()
         self.buttonsGroup.hide()
