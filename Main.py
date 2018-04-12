@@ -5,7 +5,9 @@
 from PyQt5.QtGui import QPainter, QImage, QColor, QPainterPath, \
     QPen, QMouseEvent, QPolygon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import Qt, QRect, QPointF, QRandomGenerator, QTimer,\
-    QObject, QRectF
+    QObject, QRectF, QUrl
+from PyQt5.QtMultimedia import QSound, QMediaPlayer, QMediaContent
+
 import sys
 import random
 import time
@@ -153,7 +155,6 @@ class GrafWin(QFrame):
         self.timer.timeout.connect(self.scene.advance)
         self.timer.start(1000/66)
 
-        print(self.scene.width(),self.scene.height())
         self.show()
 
     def createBtnsLayout(self):
@@ -242,15 +243,15 @@ class GrafWin(QFrame):
         self.scene.setAnswer(self.answerPokemon)
 
         self.time = time.time() - self.time
-        print("Time: " + str(self.time))
+        print("Tempo transcorrido: " + str(self.time) + " segundos!")
         guessedPokemon = self.sender().text()
         answerPokemon = self.answerPokemon
 
         if guessedPokemon == answerPokemon:
-            print("Acertou, Mizeravi!")
+            print("Acertou, Mizeravi!\n")
         else:
-            print("Achou que era o " + guessedPokemon + "? Achou errado, otario.\
-             O pokemon correto era: " + answerPokemon)
+            print("Achou que era o " + guessedPokemon + "? Achou errado, otario. O pokemon correto era: " + answerPokemon + "\n")
+            QSound.play("audio/audio.wav")
 
         self.b1.show()
         self.buttonsGroup.hide()
