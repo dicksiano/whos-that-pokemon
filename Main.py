@@ -61,6 +61,8 @@ class GrafScene(QGraphicsScene):
         self.pokemon = QGraphicsPixmapItem()
         self.setNewPokemon("Gengar")
 
+        self.answer = QGraphicsPixmapItem()
+
         # pokemon.pixmap(
         self.addItem(self.pokemon)
         self.addParticles(150)
@@ -79,6 +81,7 @@ class GrafScene(QGraphicsScene):
             # print(random(self.scene.width()))
             part = Particle(QPointF(gen.bounded(self.width()),\
                 gen.bounded(self.height())))
+            part.setVisible(False)
             self.addItem(part)
 
     def setNewPokemon(self, name):
@@ -93,6 +96,12 @@ class GrafScene(QGraphicsScene):
         pokepix = self.pokemon.pixmap()
         self.pokemon.setPos(220-self.image.width()/2,220-self.image.height()/2)
 
+    def setAnswer(self, name):
+        self.image.load("assets/" + name.lower() + ".png")
+        self.pokemon.setPixmap(QPixmap().fromImage(self.image))
+        pokepix = self.pokemon.pixmap()
+        self.pokemon.setPos(220-self.image.width()/2,220-self.image.height()/2)
+
     def upAlpha(self, particle: QGraphicsItem):
         if self.pokemon.collidesWithItem(particle):
             # particle.setVisible(False)
@@ -103,15 +112,11 @@ class GrafScene(QGraphicsScene):
                 for i in range(-border,border):
                     for j in range(-border,border):
                         color = self.image.pixelColor(pos.x()+i, pos.y()+j)
-                        if color.alpha() > 0 and color.alpha() < 255:
+                        if color.alpha() > 0 and color.alpha() < 245:
                             color.setAlpha(color.alpha()+10)
                             self.image.setPixel(pos.x()+i, pos.y()+j, color.rgba())
                             self.pokemon.setPixmap(QPixmap().fromImage(self.image))
                             self.pokemon.show()
-
-
-
-
 
 
 class GrafWin(QFrame):
@@ -222,10 +227,20 @@ class GrafWin(QFrame):
         self.time = time.time()
 
 
+        for i in self.scene.items():
+            if isinstance(i,Particle):
+                i.setVisible(True)
+
+
     def on_click_nop(self):
         pass
 
     def on_click_choose(self):
+        for i in self.scene.items():
+            if isinstance(i,Particle):
+                i.setVisible(False)
+        self.scene.setAnswer(self.answerPokemon)
+
         self.time = time.time() - self.time
         print("Time: " + str(self.time))
         guessedPokemon = self.sender().text()
